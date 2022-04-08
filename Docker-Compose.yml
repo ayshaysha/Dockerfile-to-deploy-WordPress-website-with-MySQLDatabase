@@ -1,0 +1,39 @@
+version: '3.0'
+ 
+services:
+  #Database
+  db:
+    container_name: MySQLServer
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@33w0rd**19
+      MYSQL_DATABASE: W0rdPr3ss
+      MYSQL_USER: W0rdPr3ss
+      MYSQL_PASSWORD: W0rdPr3ss
+    networks:
+      - wpsitenetwork
+  #WordPress
+  wordpress:
+    container_name: WordpressServer
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - '8000:80'
+    volumes: ['./:/var/www/html']
+    restart: always
+    environment:
+      WORDPRESS_DB_NAME: W0rdPr3ss
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: W0rdPr3ss
+      WORDPRESS_DB_PASSWORD: W0rdPr3ss
+    networks:
+      - wpsitenetwork
+ 
+networks:
+  wpsitenetwork:
+volumes:
+  db_data:
